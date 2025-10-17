@@ -1,5 +1,7 @@
 #include "graph.h"
 
+#define SPARSE  0.2
+#define DENSE   0.8 
 
 Node* createNode(int num) {
     Node* node = (Node*)malloc(sizeof(Node));
@@ -93,7 +95,7 @@ bool edgeExists(Graph* graph, int src, int dest) {
 
 
 Graph* generateRandomGraph(size_t size) {
-    if (size == 0) return NULL;
+    if (size == 0 || size == 1) return NULL;
     Graph* graph = createGraph(size);
     if (graph == NULL) return NULL;
 
@@ -123,6 +125,68 @@ Graph* generateRandomGraph(size_t size) {
 }
 
 
+//TODO
+Graph* generateSparseGraph(size_t size) {
+    if (size == 0 || size == 1) return NULL;
+    Graph* graph = createGraph(size);
+    if (graph == NULL) return NULL;
+
+    srand(time(NULL));
+    int src = 0;
+    int dest = 0;
+    int max_possible_edges = size * (size - 1);
+    int quantity_of_edges = (int)(max_possible_edges * SPARSE);
+    int edges_added = 0;
+    int attempts = 0;
+    int max_attempts = quantity_of_edges * 10;
+
+    while (edges_added < quantity_of_edges && attempts < max_attempts) {
+        attempts++;
+        src = rand() % size;
+        dest = rand() % size;
+
+        //пропускаем петли и уже существующие ребра
+        if (src == dest) continue;
+        if (edgeExists(graph, src, dest)) continue;
+
+        addEdge(graph, src, dest);
+        edges_added++;
+    }
+
+    return graph;
+}
+
+
+Graph* generateDenseGraph(size_t size) {
+    if (size == 0 || size == 1) return NULL;
+    Graph* graph = createGraph(size);
+    if (graph == NULL) return NULL;
+
+    srand(time(NULL));
+    int src = 0;
+    int dest = 0;
+    int max_possible_edges = size * (size - 1);
+    int quantity_of_edges = (int)(max_possible_edges * DENSE);
+    int edges_added = 0;
+    int attempts = 0;
+    int max_attempts = quantity_of_edges * 10;
+
+    while (edges_added < quantity_of_edges && attempts < max_attempts) {
+        attempts++;
+        src = rand() % size;
+        dest = rand() % size;
+
+        //пропускаем петли и уже существующие ребра
+        if (src == dest) continue;
+        if (edgeExists(graph, src, dest)) continue;
+
+        addEdge(graph, src, dest);
+        edges_added++;
+    }
+
+    return graph;
+}
+
 void destroyGraph(Graph *graph) {
         if (graph == NULL) return;
 
@@ -134,22 +198,6 @@ void destroyGraph(Graph *graph) {
         free(graph);
 }
 
-/* не нужна
-//ищем всех соседей вершины v
-int search(Graph* graph, int v) {
-        if (graph == NULL) return -1;
-        if (graph->size == 0) return -1;
-
-        int index = -1;
-        for (size_t i = 0; i < graph->size; i++) {
-                if (graph->vertices[i]->name = v) {
-                        index = i;
-                        break;
-                }
-        }
-        return index;
-}
-*/
 
 void DFS(Graph* graph, int v, int* colour, int* visited, int* visited_count) {
     if (graph == NULL) return;
