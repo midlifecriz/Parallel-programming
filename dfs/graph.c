@@ -222,3 +222,20 @@ void DFS(Graph* graph, int v, int* colour, int* visited, int* visited_count) {
     colour[v] = BLACK;
 }
 
+
+void shellForDFS(Graph* graph, int* colour, int* visited, int* visited_count) {
+    if (graph == NULL) return;
+    
+    // Инициализируем все вершины как непосещенные
+    for (int i = 0; i < graph->size; i++) {
+        colour[i] = WHITE;
+    }
+    
+    // Запускаем DFS для каждой белой вершины
+    for (int i = 0; i < graph->size; i++) {
+        if (colour[i] == WHITE) {
+            DFS(graph, i, colour, visited, visited_count);
+        }
+    }
+}
+

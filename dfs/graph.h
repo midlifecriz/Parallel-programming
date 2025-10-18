@@ -50,6 +50,7 @@ void destroyGraph(Graph*);
 //DFS
 //int search(Graph*, int);
 void DFS(Graph*, int, int*, int*, int*);
+void shellForDFS(Graph*,  int*, int*, int*);
 
 #endif
 
